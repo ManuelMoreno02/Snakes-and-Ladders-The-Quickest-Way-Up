@@ -37,8 +37,32 @@ void ami(vector<vector<int>> ladders,vector<int> actual,int valor,int j,vector<v
 *  1. 2D_INTEGER_ARRAY ladders
 *  2. 2D_INTEGER_ARRAY snakes
 */
+vector<int> subidabajada(vector<vector<int>> ladders, vector<vector<int>> snakes,int menor,int mayor){
+  bool valor=false;
+  int snakes_valor;
+  vector<int> re_valor(2);
+    for(int i=0;i<ladders.size();i++){
+        vector<int> aa= ladders[i];
+        if(ladders[i][0]>menor && ladders[i][0]<mayor){
+            for(int j=0;snakes.size();j++){
+                vector<int> ab= snakes[j];
+                if(snakes[i][1]>menor && snakes[i][1]<mayor){
+                 snakes_valor=snakes[i][1];
+                valor=true;
+                re_valor[0]=snakes_valor;
+                re_valor[1]=valor;
+                break;
+                }
+            }
+        }
+        if(valor==true)break;
+    }
 
+    return re_valor;
+}
 int quickestWayUp(vector<vector<int>> ladders, vector<vector<int>> snakes) {
+   vector<vector<int>> as(ladders.size());
+    as=ladders;
     valorfin=0;
   int dado=6;     
 vector<vector<int>> ladders_con(ladders.size());
@@ -47,6 +71,8 @@ int posicion_ladders=0,posicion=1;
 int mayor=0;
 
     for(int i=0;i<ladders.size();i++){
+        vector<int> a=ladders[i];
+        int valor=ladders[i][1]-ladders[i][0];
         ami(ladders,ladders[i],ladders[i][1]-ladders[i][0],0,ladders_con);}
   
     for(int i=0;i<snakes.size();i++){
@@ -68,14 +94,20 @@ int mayor=0;
     global.push_back({100,100});
     int contador=0;
     while(posicion<100&&posicion>0){
-        int as=posicion+6;
+        int as=posicion+dado;
         contador+=1;
         int b=global[posicion_ladders][0];
         vector<vector<int>> g=global;
+        int divis=b/dado;
         if(posicion+dado>=global[posicion_ladders][0]){
             posicion=global[posicion_ladders][1];
             posicion_ladders+=1;
-        }else{
+        }else if(divis>4){
+            vector<int> validacion= subidabajada( ladders, snakes,posicion+1, global[posicion_ladders][0]);
+                if(validacion[1]==true){
+                posicion=validacion[0];
+                contador++;
+                }else{ 
             bool pase=false;
           for(int a=posicion+dado;a>posicion;a--){
                for(int b=0;b<snakes_tem.size();b++){
@@ -93,14 +125,41 @@ int mayor=0;
                }
             if(pase==true)break;   
             }
+            
+                }
+            
+            
         }
         
+        else{ 
+            bool pase=false;
+          for(int a=posicion+dado;a>posicion;a--){
+               for(int b=0;b<snakes_tem.size();b++){
+                   if(a==snakes_tem[b]){
+                       if(a==posicion+1){
+                           pase=true;
+                           posicion=-1;
+                           contador=-1;
+                      }
+                      break;
+                   }
+                   if(b==snakes_tem.size()-1){
+                       posicion=a;
+                      pase=true;}
+               }
+            if(pase==true)break;   
+            }
+            
+                }
+            
+       
     }
+    
+    
     
   return contador;
     
 }
-
 int main()
 {
     ofstream fout(getenv("OUTPUT_PATH"));
@@ -207,3 +266,4 @@ vector<string> split(const string &str) {
 
     return tokens;
 }
+
