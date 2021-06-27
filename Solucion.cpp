@@ -5,6 +5,7 @@ using namespace std;
 string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
+
 int mayor=0;
 int valorfin;
 vector<vector<int>> global;
@@ -60,6 +61,26 @@ vector<int> subidabajada(vector<vector<int>> ladders, vector<vector<int>> snakes
 
     return re_valor;
 }
+vector<vector<int>> actualizacion_vec(vector<vector<int>> glob){
+    for(int i=0;i<glob.size();i++){
+       if(i<glob.size()-2){
+           int variable=i;
+           int a=(glob[i][1]+6);
+           int b=glob[i+2][0];
+           int c=glob[i][1];
+           if((glob[i][1]+6)>glob[i+2][0]&&glob[i][1]!=100){
+              while((i+1)<glob.size()-1){
+                  glob[i+1]=glob[i+2];
+                  i++;
+              }
+
+           }
+           i=variable;
+       }
+    }
+     vector<vector<int>> globq=glob;
+    return globq;
+}
 int quickestWayUp(vector<vector<int>> ladders, vector<vector<int>> snakes) {
    vector<vector<int>> as(ladders.size());
     as=ladders;
@@ -93,6 +114,7 @@ int mayor=0;
            global[i]={100,100};}}
     global.push_back({100,100});
     int contador=0;
+    global=actualizacion_vec(global);
     while(posicion<100&&posicion>0){
         int as=posicion+dado;
         contador+=1;
@@ -160,6 +182,7 @@ int mayor=0;
   return contador;
     
 }
+
 int main()
 {
     ofstream fout(getenv("OUTPUT_PATH"));
@@ -266,4 +289,3 @@ vector<string> split(const string &str) {
 
     return tokens;
 }
-
